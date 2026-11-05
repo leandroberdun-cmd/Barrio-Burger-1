@@ -1,0 +1,16 @@
+from pathlib import Path
+import re
+
+base = Path("/mnt/data/mi_tienda_online")
+html = (base / "index.html").read_text(encoding="utf-8")
+css = (base / "styles.css").read_text(encoding="utf-8")
+js = (base / "script.js").read_text(encoding="utf-8")
+
+# Build a single-file version so it can be opened directly without missing CSS/JS files.
+js = js.replace('https://images.unsplash.com/photo- burger-combo?w=700',
+                'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=700&auto=format&fit=crop')
+single = html.replace('  <link rel="stylesheet" href="styles.css">', f'  <style>\n{css}\n  </style>')
+single = single.replace('  <script src="script.js"></script>', f'  <script>\n{js}\n  </script>')
+out = Path("/mnt/data/Barrio_Burger_FUNCIONA.html")
+out.write_text(single, encoding="utf-8")
+print("Archivo HTML único creado:", out)
